@@ -89,6 +89,11 @@ class CreepFrd(object):
 		self.cord[1] += self.vel[1] * self.spd
 		
 	def sendOver():
+		string = str(self.tower.name) + " " + timer.iocheck + " " + str(self.cord[1])
+	
+	def buildNew(self):
+		newCreep = CreepFrd(pygame.image.load(self.img))
+		return newCreep
 		
 		
 		
@@ -97,8 +102,10 @@ class CreepFrd(object):
 		
 		
 		
-testCreep = CreepFrd("")
-testCreep.vel = convertVel(45)
+testCreep = CreepFrd("Assets/images/creep.png")
+
+testCreep = testCreep.buildNew()
+testCreep.vel = convertVel(315)
 
 class Tower(object):
 	def __init__(self, name, type, hp, damage, cost, img):
@@ -133,7 +140,8 @@ while not done:
 	mouse_pos = pygame.mouse.get_pos()
 	testCreep.update()
 	gScreen.fill(WHITE)
-	pygame.draw.rect(gScreen, RED, [testCreep.cord[0], testCreep.cord[1], 25,25])
+	
+	gScreen.blit(testCreep.img, [testCreep.cord[0], testCreep.cord[1]])
 	
 		
 		
