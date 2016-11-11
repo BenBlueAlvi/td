@@ -88,6 +88,9 @@ class CreepFrd(object):
 		self.cord[0] += self.vel[0] * self.spd
 		self.cord[1] += self.vel[1] * self.spd
 		
+	def sendOver():
+		
+		
 		
 		
 		
@@ -95,15 +98,21 @@ class CreepFrd(object):
 		
 		
 testCreep = CreepFrd("")
-testCreep.vel = convertVel(90)
+testCreep.vel = convertVel(45)
 
 class Tower(object):
-	def __init__(self, name, hp, damage, cost, pos):
+	def __init__(self, name, type, hp, damage, cost, img):
 		self.name = name
+		self.type.type
 		self.hp = hp
 		self.damage = damage
 		self.cost = cost
 		self.pos = pos
+		self.img = img
+		
+	def buildNew(self):
+		newTower = Tower(self.name, self.hp, self.damage, self.cost, pygame.image.load(self.img))
+		return newTower
 	
 		
 		
