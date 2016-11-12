@@ -57,6 +57,27 @@ def convertVel(input):
 	y_vel = -math.sin(radians)
 	velocity = (x_vel, y_vel)
 	return velocity		
+	
+def pointAt(source, point):
+	deltax = source[0] - point[0]
+	deltay = source[1] - point[1]
+	angle = 0
+	#upper left
+	if deltax > 0 and deltay > 0:
+		angle = 270 - math.atan((math.fabs(deltay))/(math.fabs(deltax))) + 90
+	
+	#lower left
+	if deltax > 0 and deltay < 0:
+		angle = 270 - math.atan(deltay/math.fabs(deltax)) + 90
+		
+	#upper right
+	if deltax < 0 and deltay > 0:
+		angle = math.atan(deltay/math.fabs(deltax))
+	#lower right
+	if deltax < 0 and deltay < 0:
+		angle = math.atan(deltay/math.fabs(deltax))
+	
+	return math.degrees(angle)
 
 class CreepEnm(object):
 	def __init__(self, type, y):
@@ -77,22 +98,29 @@ class CreepEnm(object):
 class CreepFrd(object):
 	def __init__(self, img):
 		self.tower = ""
-		self.spd = 2
-		self.cord = [50,50]
+		self.spd = 0
+		self.size = (5, 100)
+		self.center = (self.size[0] / 2, self.size[1] / 2)
+		self.cord = [size[0] / 2, size[1] / 2]
 		self.vel = [0,0]
 		self.img = img
+		self.baseimg = img
+		self.angle = 0
 		
 		
+	def update(self, mouse_pos):
+		#self.cord[0] += self.vel[0] * self.spd
+		#self.cord[1] += self.vel[1] * self.spd
+		self.angle += 1
+		self.img = pygame.transform.rotate(self.baseimg, pointAt(self.cord,mouse_pos))
 		
-	def update(self):
-		self.cord[0] += self.vel[0] * self.spd
-		self.cord[1] += self.vel[1] * self.spd
 		
 	def sendOver():
 		string = str(self.tower.name) + " " + timer.iocheck + " " + str(self.cord[1])
 	
 	def buildNew(self):
 		newCreep = CreepFrd(pygame.image.load(self.img))
+		newCreep.baseimg = newCreep.img
 		return newCreep
 		
 		
@@ -105,7 +133,7 @@ class CreepFrd(object):
 testCreep = CreepFrd("Assets/images/creep.png")
 
 testCreep = testCreep.buildNew()
-testCreep.vel = convertVel(315)
+
 
 class Tower(object):
 	def __init__(self, name, type, hp, damage, cost, img):
@@ -122,7 +150,7 @@ class Tower(object):
 		return newTower
 	
 		
-		
+	
 		
 		
 		
@@ -136,9 +164,11 @@ while not done:
 				
 		elif event.type == pygame.MOUSEBUTTONUP:
 			mouse_down = False
-		
+	
+	
 	mouse_pos = pygame.mouse.get_pos()
-	testCreep.update()
+	testCreep.update(mouse_pos)
+	
 	gScreen.fill(WHITE)
 	
 	gScreen.blit(testCreep.img, [testCreep.cord[0], testCreep.cord[1]])
